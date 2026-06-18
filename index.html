@@ -5,18 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>O&O Project: De Neon-Express - Gerrit Rietveld College</title>
     <style>
-        /* DEFINIEER DE PREMIUM NEON KLEUREN EN STIJLEN */
         :root {
-            --bg-color: #0d0e15;
-            --panel-bg: #161925;
+            --bg-color: #060713;
+            --panel-bg: #111424;
             --neon-cyan: #00f3ff;
             --neon-magenta: #ff0077;
             --neon-green: #39ff14;
-            --neon-orange: #ff5e00;
             --text-color: #ffffff;
             --text-muted: #a0a5c0;
-            --border-color: #252a40;
-            --active-glow: #00f3ff; /* Wordt dynamisch bijgewerkt door JavaScript */
+            --border-color: #222947;
         }
 
         body {
@@ -28,14 +25,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
         }
 
         header {
             text-align: center;
             padding: 40px 20px;
             width: 100%;
-            background: linear-gradient(180deg, rgba(0,243,255,0.15) 0%, rgba(13,14,21,0) 100%);
+            background: linear-gradient(180deg, rgba(0,243,255,0.15) 0%, rgba(6,7,19,0) 100%);
             box-sizing: border-box;
         }
 
@@ -87,42 +83,16 @@
         }
 
         .simulation-container {
-            border: 2px solid var(--active-glow);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-        }
-
-        /* Fullscreen styling overschrijven */
-        .simulation-container:fullscreen {
-            width: 100vw;
-            height: 100vh;
-            border-radius: 0;
-            border: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            background-color: var(--bg-color);
-        }
-
-        .simulation-container:fullscreen canvas {
-            max-width: 90%;
-            height: 60vh;
-            aspect-ratio: 700 / 350;
-        }
-
-        .simulation-container:fullscreen .telemetry {
-            width: 90%;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
         }
 
         .control-panel {
             border: 2px solid var(--neon-magenta);
-            box-shadow: 0 0 20px rgba(255, 0, 119, 0.2);
+            box-shadow: 0 0 20px rgba(255, 0, 119, 0.15);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
 
         .panel-title {
@@ -130,7 +100,7 @@
             text-transform: uppercase;
             color: var(--neon-magenta);
             text-shadow: 0 0 8px var(--neon-magenta);
-            margin: 0;
+            margin: 0 0 10px 0;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 10px;
         }
@@ -140,7 +110,7 @@
             border-radius: 12px;
             width: 100%;
             height: auto;
-            aspect-ratio: 700 / 350;
+            aspect-ratio: 700 / 300;
             box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
             border: 1px solid #1a1f38;
         }
@@ -148,16 +118,16 @@
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         label {
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #d1d5db;
         }
 
-        /* Sliders & Knoppen */
+        /* Sliders & Buttons */
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
@@ -174,59 +144,53 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            background: var(--active-glow);
+            background: var(--neon-cyan);
             cursor: pointer;
-            box-shadow: 0 0 10px var(--active-glow);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px var(--neon-cyan);
         }
 
-        .btn-grid-4 {
+        .btn-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        .btn-grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .btn-grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
         button {
-            background-color: #1f2336;
+            background-color: #1a1f36;
             color: white;
             border: 2px solid var(--border-color);
-            padding: 12px 5px;
+            padding: 14px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
             transition: all 0.2s ease;
         }
 
         button:hover {
-            background-color: #2b314d;
+            background-color: #242b4d;
             border-color: #3b457a;
         }
 
-        button.active {
-            border-color: var(--active-glow);
-            box-shadow: 0 0 12px var(--active-glow);
-            color: var(--active-glow);
-            background-color: rgba(255, 255, 255, 0.03);
+        button.active-cyan {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            color: var(--neon-cyan);
+            background-color: rgba(0, 243, 255, 0.05);
+        }
+
+        button.active-magenta {
+            border-color: var(--neon-magenta);
+            box-shadow: 0 0 15px rgba(255, 0, 119, 0.4);
+            color: var(--neon-magenta);
+            background-color: rgba(255, 0, 119, 0.05);
         }
 
         .telemetry {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
             background: #05060b;
             padding: 15px;
@@ -237,7 +201,7 @@
         }
 
         .telemetry-item {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
         }
 
@@ -255,7 +219,6 @@
             flex-direction: column;
             gap: 30px;
             margin-bottom: 60px;
-            box-sizing: border-box;
         }
 
         .info-card {
@@ -274,14 +237,12 @@
             padding-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            text-shadow: 0 0 5px var(--neon-cyan);
         }
 
         .info-card h3 {
             color: var(--neon-magenta);
             font-size: 1.15rem;
             margin-top: 20px;
-            text-shadow: 0 0 5px var(--neon-magenta);
         }
 
         p, li {
@@ -317,7 +278,6 @@
             font-weight: bold;
             color: var(--neon-green);
             margin-bottom: 5px;
-            text-shadow: 0 0 5px var(--neon-green);
         }
 
         .stat-lbl {
@@ -354,75 +314,41 @@
 
     <main>
         <!-- SIMULATIE -->
-        <div class="simulation-container" id="simContainer">
-            <h2 style="color: var(--active-glow); font-size: 1.2rem; text-transform: uppercase; margin-top: 0; margin-bottom: 15px; transition: color 0.3s ease;" id="simTitle">Live Bocht- & Snelheidssimulator</h2>
-            
-            <canvas id="trainCanvas" width="700" height="350"></canvas>
+        <div class="simulation-container">
+            <h2 style="color: var(--neon-cyan); font-size: 1.2rem; text-transform: uppercase; margin-top: 0; margin-bottom: 15px;">Live Prototype Simulator</h2>
+            <canvas id="trainCanvas" width="700" height="300"></canvas>
             
             <div class="telemetry">
-                <div class="telemetry-item">Trein Snelheid: <span id="tel-speed" class="telemetry-value">0 km/u</span></div>
-                <div class="telemetry-item">Huidig Depot: <span id="tel-station" class="telemetry-value">Spoorwegmuseum Depot</span></div>
-                <div class="telemetry-item">Pakketjes Bezorgd: <span id="tel-deliveries" class="telemetry-value">0 / 10</span></div>
-                <div class="telemetry-item">Neon Kleurschema: <span id="tel-color" class="telemetry-value" style="color: var(--neon-cyan);">Cyaan</span></div>
+                <div class="telemetry-item">Lego Motor Power: <span id="tel-speed" class="telemetry-value">0%</span></div>
+                <div class="telemetry-item">Neon EL-Wire: <span id="tel-lights" class="telemetry-value">UIT</span></div>
+                <div class="telemetry-item">LED Rails Kleur: <span id="tel-color" class="telemetry-value">Cyaan</span></div>
+                <div class="telemetry-item">Hardware Link: <span class="telemetry-value" style="color: var(--neon-green);">CONNECTED</span></div>
             </div>
         </div>
 
         <!-- BEDIENING -->
         <div class="control-panel">
-            <h2 class="panel-title">Machinist Bedieningspaneel</h2>
+            <h2 class="panel-title">Bedieningspaneel</h2>
             
-            <!-- Scherm Mode Selector -->
             <div class="control-group">
-                <label>Interactieve Weergave:</label>
-                <div class="btn-grid-2">
-                    <button id="btnViewTop" class="active" onclick="setViewMode('top')">Bovenaanzicht</button>
-                    <button id="btnViewCab" onclick="setViewMode('cab')">Cabine-View (Koerier)</button>
+                <label for="speedSlider">Lego Technic Vermogen (Snelheid):</label>
+                <input type="range" id="speedSlider" min="0" max="100" value="0">
+            </div>
+
+            <div class="control-group">
+                <label>Trein Verlichting (Neon Glow):</label>
+                <button id="btnLights" onclick="toggleLights()">Zet Neon Aan</button>
+            </div>
+
+            <div class="control-group">
+                <label>Kleur LED-Verlichting Rails:</label>
+                <div class="btn-grid">
+                    <button id="btnColorCyan" class="active-cyan" onclick="setRailsColor('cyan')">Cyaan</button>
+                    <button id="btnColorMagenta" onclick="setRailsColor('magenta')">Magenta</button>
                 </div>
             </div>
 
-            <!-- Volledig Scherm Knop -->
-            <button style="background-color: #1a1f36; border-color: var(--neon-cyan); color: var(--neon-cyan); font-size: 0.85rem; padding: 10px; margin-bottom: 5px;" onclick="toggleFullscreen()">🖥️ OPEN VOLLEDIG SCHERM</button>
-
-            <!-- Gashendel -->
-            <div class="control-group">
-                <label for="throttleSlider">Gashendel (Stroomtoevoer Lego Motor):</label>
-                <input type="range" id="throttleSlider" min="0" max="100" value="0">
-            </div>
-
-            <!-- Rem -->
-            <div class="control-group">
-                <label for="brakeSlider">Handrem (Mechanische wrijving):</label>
-                <input type="range" id="brakeSlider" min="0" max="100" value="0">
-            </div>
-
-            <!-- Wagons (Enkel zichtbaar/actief in Bovenaanzicht) -->
-            <div class="control-group" id="wagonControlGroup">
-                <label for="wagonSlider">Aantal Lego-Wagons gekoppeld: <span id="wagonCountDisplay">3</span></label>
-                <input type="range" id="wagonSlider" min="1" max="5" value="3">
-            </div>
-
-            <!-- Circuit Selector (Enkel in Bovenaanzicht) -->
-            <div class="control-group" id="circuitControlGroup">
-                <label>Kies Spoor / Circuit:</label>
-                <div class="btn-grid-3">
-                    <button id="btnCircuit1" class="active" onclick="setCircuit(1)">De Grote Bocht</button>
-                    <button id="btnCircuit2" onclick="setCircuit(2)">Infinity Loop</button>
-                    <button id="btnCircuit3" onclick="setCircuit(3)">Techlab S-Bocht</button>
-                </div>
-            </div>
-
-            <!-- Neon Kleurschema -->
-            <div class="control-group">
-                <label>Neon Kleur veranderen:</label>
-                <div class="btn-grid-4">
-                    <button id="colorBtn-cyan" class="active" onclick="changeColor('cyan')">Cyaan</button>
-                    <button id="colorBtn-magenta" onclick="changeColor('magenta')">Magenta</button>
-                    <button id="colorBtn-green" onclick="changeColor('green')">Groen</button>
-                    <button id="colorBtn-orange" onclick="changeColor('orange')">Oranje</button>
-                </div>
-            </div>
-
-            <button style="background-color: #5c0623; border-color: var(--neon-magenta); color: white; margin-top: 10px; font-size: 1rem; box-shadow: 0 0 10px rgba(255, 0, 119, 0.3);" onclick="emergencyStop()">⚠️ NOODSTOP (Brake Lock)</button>
+            <button style="background-color: #5c0623; border-color: var(--neon-magenta); color: white; margin-top: 15px; font-size: 1rem;" onclick="emergencyStop()">⚠️ NOODSTOP</button>
         </div>
     </main>
 
@@ -480,7 +406,7 @@
             <p>We hebben gekeken naar twee uitersten in de museumwereld om inspiratie op te doen voor ons ontwerp:</p>
             <ul>
                 <li><strong>NEMO Science Museum:</strong> Hét voorbeeld van een 'hands-on' mentaliteit. Jongeren voeren zelf proeven uit, wat zorgt voor een hoge actieve betrokkenheid. Dit principe van zelf de controle hebben nemen we mee.</li>
-                <li><strong>NXT Museum Amsterdam:</strong> Een museum gericht op grootschalige digitale kunst en lichtinstallaties in volledig verduisterde kamers. Dit is extreem populair op social media vanwege het futuristische design og de felle neon-contrasten.</li>
+                <li><strong>NXT Museum Amsterdam:</strong> Een museum gericht op grootschalige digitale kunst en lichtinstallaties in volledig verduisterde kamers. Dit is extreem populair op social media vanwege het futuristische design en de felle neon-contrasten.</li>
             </ul>
             <p><strong>Conclusie:</strong> Door het mechanische aspect van NEMO te combineren met het visuele spektakel (neon in het donker) van het NXT Museum, ontstaat de perfecte formule voor het Spoorwegmuseum.</p>
         </div>
@@ -515,486 +441,187 @@
     </footer>
 
     <script>
-        // Canvas Setup
+        // Canvas en Context Setup
         const canvas = document.getElementById('trainCanvas');
         const ctx = canvas.getContext('2d');
         
-        // Snelheid & Fysica State
-        let currentSpeed = 0; // Huidige snelheid
-        let throttle = 0;     // Gashendel percentage
-        let brakes = 0;       // Rem percentage
-        let numWagons = 3;    // Aantal gekoppelde wagons
-        let activeCircuit = 1; // Huidige circuit ID
-        let trackPoints = []; // Lijst met gegenereerde baankoördinaten
-        let viewMode = 'top'; // 'top' (bovenaanzicht) of 'cab' (cabine-view)
-        
-        let trainProgress = 0; // Huidige index op het spoor (0 t/m 999)
+        // Applicatie Status
+        let speed = 0;
+        let lightsOn = false;
+        let railsColor = 'cyan';
+        let trainX = 50;
 
-        // Koerier & Delivery Mode State
-        let totalDeliveries = 0;
-        let lastDeliveredStationIdx = -1;
-        let nextStationDistance = 100;
-        let showPackageNotification = 0; // Frame teller voor melding
-        let cabSceneryX = 0; // Voor scrollende lichten in cabine view
-
-        const stations = [
-            { name: "Spoorwegmuseum Depot", progress: 250 },
-            { name: "Utrecht Maliebaan", progress: 500 },
-            { name: "Gerrit Rietveld Hub", progress: 750 },
-            { name: "Utrecht Centraal", progress: 980 }
-        ];
-
-        // Kleuren
-        let neonHex = '#00f3ff'; // Standaard cyaan
-        const colors = {
-            cyan: { hex: '#00f3ff', label: 'Cyaan' },
-            magenta: { hex: '#ff0077', label: 'Magenta' },
-            green: { hex: '#39ff14', label: 'Lime Groen' },
-            orange: { hex: '#ff5e00', label: 'Electric Oranje' }
-        };
-
-        // DOM Elementen
-        const throttleSlider = document.getElementById('throttleSlider');
-        const brakeSlider = document.getElementById('brakeSlider');
-        const wagonSlider = document.getElementById('wagonSlider');
-        const wagonCountDisplay = document.getElementById('wagonCountDisplay');
+        // HTML Elementen koppelen
+        const speedSlider = document.getElementById('speedSlider');
         const telSpeed = document.getElementById('tel-speed');
-        const telDeliveries = document.getElementById('tel-deliveries');
-        const telStation = document.getElementById('tel-station');
+        const telLights = document.getElementById('tel-lights');
         const telColor = document.getElementById('tel-color');
-        const simContainer = document.getElementById('simContainer');
-        const simTitle = document.getElementById('simTitle');
+        const btnLights = document.getElementById('btnLights');
+        const btnColorCyan = document.getElementById('btnColorCyan');
+        const btnColorMagenta = document.getElementById('btnColorMagenta');
 
-        // Event Listeners voor Sliders
-        throttleSlider.addEventListener('input', (e) => {
-            throttle = parseInt(e.target.value);
+        // Slider input verwerken
+        speedSlider.addEventListener('input', (e) => {
+            speed = parseInt(e.target.value);
+            telSpeed.innerText = speed + '%';
         });
 
-        brakeSlider.addEventListener('input', (e) => {
-            brakes = parseInt(e.target.value);
-        });
-
-        wagonSlider.addEventListener('input', (e) => {
-            numWagons = parseInt(e.target.value);
-            wagonCountDisplay.innerText = numWagons;
-        });
-
-        // 1. Spoor Circuits Genereren
-        function generateTrack() {
-            trackPoints = [];
-            const numPoints = 1000;
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-
-            for (let i = 0; i < numPoints; i++) {
-                let angle = (i / numPoints) * Math.PI * 2;
-                let x, y;
-
-                if (activeCircuit === 1) {
-                    // Circuit 1: De Grote Kidney Bocht (Vloeiend ovaal met lichte knik)
-                    x = centerX + 280 * Math.cos(angle);
-                    y = centerY + 100 * Math.sin(angle) + 40 * Math.sin(2 * angle);
-                } else if (activeCircuit === 2) {
-                    // Circuit 2: Infinity Loop (Crossover-stijl achtvorm)
-                    x = centerX + 270 * Math.sin(angle);
-                    y = centerY + 110 * Math.sin(angle) * Math.cos(angle);
-                } else {
-                    // Circuit 3: Techlab S-Bocht (Wervelende slinger)
-                    x = centerX + 260 * Math.cos(angle) + 30 * Math.sin(3 * angle);
-                    y = centerY + 100 * Math.sin(angle) + 20 * Math.cos(2 * angle);
-                }
-
-                trackPoints.push({ x, y });
-            }
-        }
-
-        // 2. Circuit veranderen
-        function setCircuit(circuitId) {
-            activeCircuit = circuitId;
-            generateTrack();
-            
-            // UI updaten
-            document.getElementById('btnCircuit1').classList.remove('active');
-            document.getElementById('btnCircuit2').classList.remove('active');
-            document.getElementById('btnCircuit3').classList.remove('active');
-            document.getElementById('btnCircuit' + circuitId).classList.add('active');
-        }
-
-        // 3. Neon kleur veranderen
-        function changeColor(colorName) {
-            const color = colors[colorName];
-            neonHex = color.hex;
-            
-            // Pas CSS variabelen en dashboard kleur gloed direct aan
-            document.documentElement.style.setProperty('--active-glow', color.hex);
-            simContainer.style.borderColor = color.hex;
-            simContainer.style.boxShadow = `0 0 20px ${color.hex}40`;
-            simTitle.style.color = color.hex;
-
-            // Knoppen updaten
-            ['cyan', 'magenta', 'green', 'orange'].forEach(c => {
-                document.getElementById('colorBtn-' + c).classList.remove('active');
-            });
-            document.getElementById('colorBtn-' + colorName).classList.add('active');
-
-            // Telemetrie
-            telColor.innerText = color.label;
-            telColor.style.color = color.hex;
-        }
-
-        // 4. View Mode Selecteren
-        function setViewMode(mode) {
-            viewMode = mode;
-            document.getElementById('btnViewTop').classList.remove('active');
-            document.getElementById('btnViewCab').classList.remove('active');
-            
-            const wagonGroup = document.getElementById('wagonControlGroup');
-            const circuitGroup = document.getElementById('circuitControlGroup');
-
-            if (mode === 'top') {
-                document.getElementById('btnViewTop').classList.add('active');
-                wagonGroup.style.display = 'flex';
-                circuitGroup.style.display = 'flex';
-                simTitle.innerText = "Live Bocht- & Snelheidssimulator";
+        // Knop Neon Verlichting aan/uit
+        function toggleLights() {
+            lightsOn = !lightsOn;
+            if(lightsOn) {
+                telLights.innerText = "AAN (NEON)";
+                telLights.style.color = "var(--neon-cyan)";
+                btnLights.classList.add('active-cyan');
+                btnLights.innerText = "Zet Neon Uit";
             } else {
-                document.getElementById('btnViewCab').classList.add('active');
-                wagonGroup.style.display = 'none';
-                circuitGroup.style.display = 'none';
-                simTitle.innerText = "Cabine-View: Neon-Koerier";
+                telLights.innerText = "UIT";
+                telLights.style.color = "var(--neon-green)";
+                btnLights.classList.remove('active-cyan');
+                btnLights.innerText = "Zet Neon Aan";
             }
         }
 
-        // 5. Volledig Scherm (Fullscreen) toggle
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                simContainer.requestFullscreen().catch(err => {
-                    console.error(`Fout bij laden fullscreen: ${err.message}`);
-                });
+        // Knop Rails Kleur aanpassen
+        function setRailsColor(color) {
+            railsColor = color;
+            if(color === 'cyan') {
+                telColor.innerText = "Cyaan";
+                telColor.style.color = "var(--neon-cyan)";
+                btnColorCyan.classList.add('active-cyan');
+                btnColorMagenta.classList.remove('active-magenta');
             } else {
-                document.exitFullscreen();
+                telColor.innerText = "Magenta";
+                telColor.style.color = "var(--neon-magenta)";
+                btnColorCyan.classList.remove('active-cyan');
+                btnColorMagenta.classList.add('active-magenta');
             }
         }
 
-        // 6. Noodstop
+        // Noodstop functie
         function emergencyStop() {
-            throttle = 0;
-            brakes = 100;
-            throttleSlider.value = 0;
-            brakeSlider.value = 100;
+            speed = 0;
+            speedSlider.value = 0;
+            telSpeed.innerText = '0%';
+            if(lightsOn) toggleLights();
         }
 
-        // Start initieel spoor
-        generateTrack();
-
-        // 7. Animatie en Physics Loop
+        // Real-time Animatie Lus (Engine)
         function draw() {
-            // --- PHYSICS EN ACCELERATIE ---
-            let targetAcceleration = (throttle / 100) * 8; 
-            let brakingDeceleration = (brakes / 100) * 12;
-            let normalFriction = 0.1;
-
-            // Update de snelheid
-            currentSpeed += targetAcceleration - brakingDeceleration - normalFriction;
-            if (currentSpeed < 0) currentSpeed = 0;
-            if (currentSpeed > 150) currentSpeed = 150; // Max snelheid begrenzen
-
-            // Update de progressie over de baan
-            if (currentSpeed > 0) {
-                trainProgress += (currentSpeed / 12);
-                if (trainProgress >= 1000) trainProgress -= 1000;
-                cabSceneryX += (currentSpeed / 15);
-            }
-
-            // Bereken de live telemetrie snelheid
-            telSpeed.innerText = Math.round(currentSpeed) + " km/u";
-
-            // --- KOERIER LOGICA (BESTEMMINGEN & DEPOTS) ---
-            let currentTrackIdx = Math.floor(trainProgress);
-            let closestStation = stations[0];
-            let minDistance = 1000;
-
-            stations.forEach((station, index) => {
-                let dist = station.progress - currentTrackIdx;
-                if (dist < 0) dist += 1000; // Rondom het spoor
-                
-                if (dist < minDistance) {
-                    minDistance = dist;
-                    closestStation = station;
-                }
-
-                // Check of de koerier PRECIES langskomt om te bezorgen (binnen bereik van 5 stappen)
-                if (Math.abs(currentTrackIdx - station.progress) < 6 && lastDeliveredStationIdx !== index) {
-                    totalDeliveries++;
-                    lastDeliveredStationIdx = index;
-                    showPackageNotification = 120; // 120 frames lang melding tonen
-                    telDeliveries.innerText = totalDeliveries + " / 10";
-                }
-            });
-
-            telStation.innerText = closestStation.name;
-
-            // --- CANVAS SCHOONMAKEN EN TEKENEN OP BASIS VAN VIEW MODE ---
+            // Maak het scherm elke frame schoon
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            if (viewMode === 'top') {
-                drawTopDownView();
-            } else {
-                drawCabView(closestStation, minDistance);
+            // Update positie van de trein op basis van de gekozen snelheid
+            if (speed > 0) {
+                trainX += (speed / 15);
+                if (trainX > canvas.width + 160) {
+                    trainX = -160; // Kom weer terug aan de linkerkant
+                }
             }
 
-            // Teken de pop-up melding bij een succesvolle bezorging
-            if (showPackageNotification > 0) {
-                showPackageNotification--;
-                ctx.save();
-                ctx.fillStyle = 'rgba(57, 255, 20, 0.9)'; // Neon groen
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 2;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = '#39ff14';
-                
-                ctx.fillRect(canvas.width / 2 - 160, 25, 320, 45);
-                ctx.strokeRect(canvas.width / 2 - 160, 25, 320, 45);
-
-                ctx.fillStyle = '#000';
-                ctx.font = 'bold 15px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText("📦 PAKKET SUCCESVOL BEZORGD! 🎉", canvas.width / 2, 52);
-                ctx.restore();
-            }
-
-            requestAnimationFrame(draw);
-        }
-
-        // --- SUB-FUNCTIE: TOP-DOWN VIEW TEKENEN ---
-        function drawTopDownView() {
-            // LED Rails
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = neonHex;
-            ctx.strokeStyle = neonHex;
-            ctx.lineWidth = 3;
-
+            // --- 1. RAILS TEKENEN ---
+            ctx.shadowBlur = 18;
+            ctx.shadowColor = railsColor === 'cyan' ? '#00f3ff' : '#ff0077';
+            ctx.strokeStyle = railsColor === 'cyan' ? '#00f3ff' : '#ff0077';
+            ctx.lineWidth = 4;
+            
+            // Bovenste railstaaf
             ctx.beginPath();
-            ctx.moveTo(trackPoints[0].x, trackPoints[0].y);
-            for (let i = 1; i < trackPoints.length; i++) {
-                ctx.lineTo(trackPoints[i].x, trackPoints[i].y);
-            }
-            ctx.closePath();
+            ctx.moveTo(0, 200);
+            ctx.lineTo(canvas.width, 200);
+            // Onderste railstaaf
+            ctx.moveTo(0, 222);
+            ctx.lineTo(canvas.width, 222);
             ctx.stroke();
 
-            // Bielzen
+            // Lego Bielzen (Dwarsliggers)
             ctx.shadowBlur = 0;
             ctx.strokeStyle = '#1e233d';
-            ctx.lineWidth = 2;
-            for (let i = 0; i < trackPoints.length; i += 20) {
-                let p = trackPoints[i];
-                let pAhead = trackPoints[(i + 5) % 1000];
-                let angle = Math.atan2(pAhead.y - p.y, pAhead.x - p.x);
-                let perpX = Math.sin(angle) * 8;
-                let perpY = -Math.cos(angle) * 8;
-
+            ctx.lineWidth = 4;
+            for(let i = 0; i < canvas.width; i += 35) {
                 ctx.beginPath();
-                ctx.moveTo(p.x - perpX, p.y - perpY);
-                ctx.lineTo(p.x + perpX, p.y + perpY);
+                ctx.moveTo(i, 194);
+                ctx.lineTo(i, 228);
                 ctx.stroke();
             }
 
-            // Teken stations op de kaart
-            stations.forEach(station => {
-                let p = trackPoints[station.progress];
-                ctx.save();
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'var(--neon-magenta)';
-                ctx.fillStyle = 'var(--neon-magenta)';
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
-                ctx.fill();
-                
-                ctx.fillStyle = '#fff';
-                ctx.font = '8px sans-serif';
-                ctx.fillText(station.name.split(' ')[0], p.x - 15, p.y - 10);
-                ctx.restore();
-            });
-
-            // Wagons & Locomotief
-            const wagonGap = 35; 
-            for (let w = 0; w <= numWagons; w++) {
-                let wIdx = Math.floor(trainProgress - (w * wagonGap));
-                while (wIdx < 0) wIdx += 1000; 
-                wIdx = wIdx % 1000;
-
-                let p = trackPoints[wIdx];
-                let pAhead = trackPoints[(wIdx + 4) % 1000]; 
-                let angle = Math.atan2(pAhead.y - p.y, pAhead.x - p.x);
-
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate(angle);
-
-                if (w === 0) {
-                    ctx.fillStyle = '#17192b';
-                    ctx.strokeStyle = neonHex;
-                    ctx.lineWidth = 2;
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = neonHex;
-                    
-                    ctx.fillRect(-16, -7, 32, 14);
-                    ctx.strokeRect(-16, -7, 32, 14);
-
-                    ctx.fillStyle = '#2c3258';
-                    ctx.fillRect(-12, -6, 12, 12);
-
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                    ctx.fillRect(16, -2, 5, 4);
-                } else {
-                    ctx.fillStyle = '#0f111f';
-                    ctx.strokeStyle = w % 2 === 0 ? 'var(--neon-magenta)' : neonHex;
-                    ctx.lineWidth = 2;
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = ctx.strokeStyle;
-
-                    ctx.fillRect(-14, -6, 28, 12);
-                    ctx.strokeRect(-14, -6, 28, 12);
-                }
-
-                ctx.restore();
-            }
-        }
-
-        // --- SUB-FUNCTIE: FIRST-PERSON CABINE-VIEW TEKENEN (KOERIER) ---
-        function drawCabView(closestStation, distanceToStation) {
-            const centerX = canvas.width / 2;
-            const horizonY = 130;
-
-            // 1. Teken de horizon en de lucht met een verre gloed
-            let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#04050a');
-            gradient.addColorStop(0.4, '#0a0d1d');
-            gradient.addColorStop(0.7, '#13122c');
-            gradient.addColorStop(1, '#05060b');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // 2. Neon Perspective Grids & Rails (komend vanuit het verdwijnpunt)
-            ctx.save();
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = neonHex;
-            ctx.strokeStyle = neonHex;
-            ctx.lineWidth = 3;
-
-            // Linker en rechter rail die breder uitlopen
-            ctx.beginPath();
-            ctx.moveTo(centerX - 5, horizonY);
-            ctx.lineTo(0, canvas.height - 40);
+            // --- 2. LEGO TECHNIC TREIN TEKENEN ---
+            ctx.fillStyle = '#15192e';
+            ctx.shadowBlur = lightsOn ? 25 : 0;
+            ctx.shadowColor = '#00f3ff';
             
-            ctx.moveTo(centerX + 5, horizonY);
-            ctx.lineTo(canvas.width, canvas.height - 40);
-            ctx.stroke();
-
-            // Snelheidslijnen (bielzen) die op de toeschouwer af vliegen
-            ctx.strokeStyle = '#222947';
-            ctx.lineWidth = 2;
-            let offset = (cabSceneryX % 40);
-            for (let i = offset; i < canvas.height - horizonY; i += 40) {
-                let ratio = i / (canvas.height - horizonY);
-                let y = horizonY + i;
-                let width = ratio * canvas.width;
-                
-                ctx.beginPath();
-                ctx.moveTo(centerX - width/2, y);
-                ctx.lineTo(centerX + width/2, y);
-                ctx.stroke();
-            }
-            ctx.restore();
-
-            // 3. Bewegend landschap (Neon bogen / Poorten langs de track)
-            ctx.save();
-            ctx.shadowBlur = 12;
-            ctx.shadowColor = 'var(--neon-magenta)';
-            ctx.strokeStyle = 'var(--neon-magenta)';
-            ctx.lineWidth = 2;
-
-            let gateOffset = (cabSceneryX % 120);
-            for (let i = gateOffset; i < 400; i += 120) {
-                let ratio = i / 400;
-                if (ratio > 0) {
-                    let y = horizonY + (canvas.height - horizonY) * ratio;
-                    let archWidth = ratio * 350;
-                    let archHeight = ratio * 150;
-
-                    ctx.beginPath();
-                    // Teken een futuristische poort die over het spoor heen buigt
-                    ctx.arc(centerX, y, archWidth / 2, Math.PI, 0, false);
-                    ctx.stroke();
-                }
-            }
-            ctx.restore();
-
-            // 4. Aankomend Depot/Station in perspectief
-            if (distanceToStation < 150) {
-                let ratio = (150 - distanceToStation) / 150; // Groeit naarmate we dichterbij komen
-                let stationSize = ratio * 80;
-                let stationX = centerX + (ratio * 160); // Rechts van de rails geplaatst
-                let stationY = horizonY + (canvas.height - horizonY - 100) * ratio;
-
-                ctx.save();
-                ctx.shadowBlur = 20;
-                ctx.shadowColor = 'var(--neon-green)';
-                ctx.fillStyle = 'rgba(57, 255, 20, 0.2)';
-                ctx.strokeStyle = 'var(--neon-green)';
-                ctx.lineWidth = 3;
-
-                // Nagebouwde neon-halte
-                ctx.fillRect(stationX - stationSize/2, stationY - stationSize, stationSize, stationSize);
-                ctx.strokeRect(stationX - stationSize/2, stationY - stationSize, stationSize, stationSize);
-
-                ctx.fillStyle = '#fff';
-                ctx.font = `bold ${Math.max(8, ratio * 13)}px sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.fillText("DEPOT", stationX, stationY - stationSize - 10);
-                ctx.restore();
+            // Hoofdchassis
+            ctx.fillRect(trainX, 135, 150, 50); 
+            
+            // Lego Noppen op het dak (Technic look)
+            ctx.fillStyle = '#2d355e';
+            for(let i = 8; i < 150; i += 16) {
+                ctx.fillRect(trainX + i, 129, 8, 6);
             }
 
-            // 5. De cockpit/voorruit overlay (Cockpit-stijl)
-            ctx.save();
-            // Donker instrumentenpaneel onderaan het scherm
-            ctx.fillStyle = '#0a0c16';
+            // Cockpit (Licht op als neon aan staat)
+            ctx.fillStyle = lightsOn ? 'rgba(0, 243, 255, 0.8)' : '#252b47';
             ctx.beginPath();
-            ctx.moveTo(0, canvas.height);
-            ctx.lineTo(150, canvas.height - 60);
-            ctx.lineTo(canvas.width - 150, canvas.height - 60);
-            ctx.lineTo(canvas.width, canvas.height);
+            ctx.moveTo(trainX + 105, 142);
+            ctx.lineTo(trainX + 135, 142);
+            ctx.lineTo(trainX + 142, 160);
+            ctx.lineTo(trainX + 105, 160);
             ctx.closePath();
             ctx.fill();
 
-            // Neon omlijning van de cockpit voorruit
-            ctx.strokeStyle = neonHex;
-            ctx.lineWidth = 4;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = neonHex;
+            // Neon details op de zijkant van de trein
+            ctx.strokeStyle = lightsOn ? 'var(--neon-magenta)' : '#2d355e';
+            ctx.lineWidth = 3;
+            ctx.shadowColor = 'var(--neon-magenta)';
+            ctx.beginPath();
+            ctx.moveTo(trainX + 15, 165);
+            ctx.lineTo(trainX + 90, 165);
             ctx.stroke();
 
-            // 6. HUD - Bestuurs-indicators op de ruit
-            ctx.fillStyle = 'rgba(0, 243, 255, 0.15)';
-            ctx.fillRect(centerX - 120, canvas.height - 50, 240, 40);
-            ctx.strokeStyle = 'rgba(0, 243, 255, 0.5)';
-            ctx.strokeRect(centerX - 120, canvas.height - 50, 240, 40);
+            // Tandwielen / Wielen (Lego Technic stijl)
+            ctx.fillStyle = '#0d0f1d';
+            ctx.strokeStyle = lightsOn ? '#ff0077' : '#3b457a';
+            ctx.lineWidth = 3;
+            ctx.shadowBlur = 0; // Geen zware gloed op wielen zelf
+            
+            let wheels = [trainX + 30, trainX + 75, trainX + 120];
+            wheels.forEach(pos => {
+                ctx.beginPath();
+                ctx.arc(pos, 195, 16, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Technic gaten in tandwiel tekenen
+                ctx.fillStyle = '#222947';
+                for(let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
+                    let hX = pos + Math.cos(angle) * 8;
+                    let hY = 195 + Math.sin(angle) * 8;
+                    ctx.beginPath();
+                    ctx.arc(hX, hY, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.fillStyle = '#0d0f1d'; // Reset voor volgende wiel
+            });
 
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = '#fff';
-            ctx.font = '10px monospace';
-            ctx.textAlign = 'left';
-            ctx.fillText(`DOEL: BEZORG PAKKETJES`, centerX - 110, canvas.height - 35);
-            ctx.fillText(`VOLGEND DEPOT: IN ${Math.round(distanceToStation)}m`, centerX - 110, canvas.height - 20);
+            // Lichtbundel uit de koplamp
+            if(lightsOn) {
+                ctx.shadowBlur = 40;
+                ctx.shadowColor = '#00f3ff';
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.12)';
+                ctx.beginPath();
+                ctx.moveTo(trainX + 150, 150);
+                ctx.lineTo(canvas.width, 80);
+                ctx.lineTo(canvas.width, 260);
+                ctx.closePath();
+                ctx.fill();
+            }
 
-            // Grote snelheidsprojectie op de voorruit
-            ctx.fillStyle = 'rgba(57, 255, 20, 0.8)'; // Groen HUD
-            ctx.font = 'bold 22px monospace';
-            ctx.textAlign = 'center';
-            ctx.fillText(`${Math.round(currentSpeed)} km/u`, centerX, horizonY - 30);
-            ctx.font = '9px monospace';
-            ctx.fillText("CRUISE SPEED", centerX, horizonY - 15);
-            ctx.restore();
+            // Roep de volgende frame aan
+            requestAnimationFrame(draw);
         }
+
+        // Start direct met animeren van de canvas
+        draw();
     </script>
 </body>
 </html>
