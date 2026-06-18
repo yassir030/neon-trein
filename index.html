@@ -1,627 +1,714 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O&O Project: De Neon-Express - Gerrit Rietveld College</title>
-    <style>
-        :root {
-            --bg-color: #060713;
-            --panel-bg: #111424;
-            --neon-cyan: #00f3ff;
-            --neon-magenta: #ff0077;
-            --neon-green: #39ff14;
-            --text-color: #ffffff;
-            --text-muted: #a0a5c0;
-            --border-color: #222947;
-        }
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    header {
+        text-align: center;
+        padding: 40px 20px;
+        width: 100%;
+        background: linear-gradient(180deg, rgba(0,243,255,0.15) 0%, rgba(6,7,19,0) 100%);
+        box-sizing: border-box;
+    }
 
-        header {
-            text-align: center;
-            padding: 40px 20px;
-            width: 100%;
-            background: linear-gradient(180deg, rgba(0,243,255,0.15) 0%, rgba(6,7,19,0) 100%);
-            box-sizing: border-box;
-        }
+    h1 {
+        margin: 0;
+        font-size: 2.8rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px rgba(0,243,255,0.5);
+    }
 
-        h1 {
-            margin: 0;
-            font-size: 2.8rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px rgba(0,243,255,0.5);
-        }
+    .subtitle {
+        color: var(--neon-magenta);
+        margin-top: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 0 0 8px var(--neon-magenta);
+    }
 
-        .subtitle {
-            color: var(--neon-magenta);
-            margin-top: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 0 0 8px var(--neon-magenta);
-        }
+    .school-info {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-top: 5px;
+    }
 
-        .school-info {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 5px;
-        }
+    main {
+        max-width: 1200px;
+        width: 95%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding: 20px 0;
+    }
 
+    @media (min-width: 950px) {
         main {
-            max-width: 1200px;
-            width: 95%;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-            padding: 20px 0;
+            grid-template-columns: 2fr 1fr;
         }
+    }
 
-        @media (min-width: 950px) {
-            main {
-                grid-template-columns: 2fr 1fr;
-            }
-        }
+    /* Dashboard elementen */
+    .simulation-container, .control-panel {
+        background-color: var(--panel-bg);
+        border-radius: 16px;
+        padding: 24px;
+        box-sizing: border-box;
+    }
 
-        /* Dashboard elementen */
-        .simulation-container, .control-panel {
-            background-color: var(--panel-bg);
-            border-radius: 16px;
-            padding: 24px;
-            box-sizing: border-box;
-        }
+    .simulation-container {
+        border: 2px solid var(--active-glow);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+        transition: border-color 0.3s ease;
+    }
 
-        .simulation-container {
-            border: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
-        }
+    .control-panel {
+        border: 2px solid var(--neon-magenta);
+        box-shadow: 0 0 20px rgba(255, 0, 119, 0.15);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
 
-        .control-panel {
-            border: 2px solid var(--neon-magenta);
-            box-shadow: 0 0 20px rgba(255, 0, 119, 0.15);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+    .panel-title {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        color: var(--neon-magenta);
+        text-shadow: 0 0 8px var(--neon-magenta);
+        margin: 0;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 10px;
+    }
 
-        .panel-title {
-            font-size: 1.4rem;
-            text-transform: uppercase;
-            color: var(--neon-magenta);
-            text-shadow: 0 0 8px var(--neon-magenta);
-            margin: 0 0 10px 0;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
+    canvas {
+        background-color: #030408;
+        border-radius: 12px;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 700 / 350;
+        box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+        border: 1px solid #1a1f38;
+    }
 
-        canvas {
-            background-color: #030408;
-            border-radius: 12px;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 700 / 300;
-            box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
-            border: 1px solid #1a1f38;
-        }
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+    label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #d1d5db;
+    }
 
-        label {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #d1d5db;
-        }
+    /* Sliders & Buttons */
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        background: #1a1f36;
+        height: 10px;
+        border-radius: 6px;
+        outline: none;
+    }
 
-        /* Sliders & Buttons */
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            background: #1a1f36;
-            height: 10px;
-            border-radius: 6px;
-            outline: none;
-        }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--active-glow);
+        cursor: pointer;
+        box-shadow: 0 0 10px var(--active-glow);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--neon-cyan);
-            cursor: pointer;
-            box-shadow: 0 0 10px var(--neon-cyan);
-        }
+    .btn-grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
 
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+    .btn-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
 
-        button {
-            background-color: #1a1f36;
-            color: white;
-            border: 2px solid var(--border-color);
-            padding: 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            transition: all 0.2s ease;
-        }
+    button {
+        background-color: #1a1f36;
+        color: white;
+        border: 2px solid var(--border-color);
+        padding: 10px 5px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        transition: all 0.2s ease;
+    }
 
-        button:hover {
-            background-color: #242b4d;
-            border-color: #3b457a;
-        }
+    button:hover {
+        background-color: #242b4d;
+        border-color: #3b457a;
+    }
 
-        button.active-cyan {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-            color: var(--neon-cyan);
-            background-color: rgba(0, 243, 255, 0.05);
-        }
+    button.active {
+        border-color: var(--active-glow);
+        box-shadow: 0 0 12px var(--active-glow);
+        color: var(--active-glow);
+        background-color: rgba(255, 255, 255, 0.03);
+    }
 
-        button.active-magenta {
-            border-color: var(--neon-magenta);
-            box-shadow: 0 0 15px rgba(255, 0, 119, 0.4);
-            color: var(--neon-magenta);
-            background-color: rgba(255, 0, 119, 0.05);
-        }
+    .telemetry {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        background: #05060b;
+        padding: 15px;
+        border-radius: 10px;
+        font-family: 'Courier New', Courier, monospace;
+        border: 1px solid var(--border-color);
+        margin-top: 15px;
+    }
 
-        .telemetry {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            background: #05060b;
-            padding: 15px;
-            border-radius: 10px;
-            font-family: 'Courier New', Courier, monospace;
-            border: 1px solid var(--border-color);
-            margin-top: 15px;
-        }
+    .telemetry-item {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
 
-        .telemetry-item {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
+    .telemetry-value {
+        color: var(--neon-green);
+        font-weight: bold;
+    }
 
-        .telemetry-value {
-            color: var(--neon-green);
-            font-weight: bold;
-        }
+    /* Grote informatiewand onderaan */
+    .info-section {
+        max-width: 1200px;
+        width: 95%;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin-bottom: 60px;
+    }
 
-        /* Grote informatiewand onderaan */
-        .info-section {
-            max-width: 1200px;
-            width: 95%;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            margin-bottom: 60px;
-        }
+    .info-card {
+        background-color: var(--panel-bg);
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
 
-        .info-card {
-            background-color: var(--panel-bg);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
+    .info-card h2 {
+        margin-top: 0;
+        font-size: 1.6rem;
+        color: var(--neon-cyan);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-        .info-card h2 {
-            margin-top: 0;
-            font-size: 1.6rem;
-            color: var(--neon-cyan);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    .info-card h3 {
+        color: var(--neon-magenta);
+        font-size: 1.15rem;
+        margin-top: 20px;
+    }
 
-        .info-card h3 {
-            color: var(--neon-magenta);
-            font-size: 1.15rem;
-            margin-top: 20px;
-        }
+    p, li {
+        line-height: 1.6;
+        color: #d1d5db;
+    }
 
-        p, li {
-            line-height: 1.6;
-            color: #d1d5db;
-        }
+    ul {
+        padding-left: 20px;
+    }
 
-        ul {
-            padding-left: 20px;
-        }
+    li {
+        margin-bottom: 8px;
+    }
 
-        li {
-            margin-bottom: 8px;
-        }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
+    .stat-box {
+        background-color: #090a14;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        border-left: 4px solid var(--neon-magenta);
+    }
 
-        .stat-box {
-            background-color: #090a14;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border-left: 4px solid var(--neon-magenta);
-        }
+    .stat-num {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--neon-green);
+        margin-bottom: 5px;
+    }
 
-        .stat-num {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--neon-green);
-            margin-bottom: 5px;
-        }
+    .stat-lbl {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
 
-        .stat-lbl {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
+    .flow-step {
+        background: #090a14;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        border-left: 4px solid var(--neon-cyan);
+    }
 
-        .flow-step {
-            background: #090a14;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-left: 4px solid var(--neon-cyan);
-        }
+    footer {
+        padding: 30px;
+        color: #4b526d;
+        font-size: 0.9rem;
+        text-align: center;
+        width: 100%;
+        border-top: 1px solid var(--border-color);
+        background-color: #090a14;
+    }
+</style>
 
-        footer {
-            padding: 30px;
-            color: #4b526d;
-            font-size: 0.9rem;
-            text-align: center;
-            width: 100%;
-            border-top: 1px solid var(--border-color);
-            background-color: #090a14;
-        }
-    </style>
-</head>
-<body>
 
-    <header>
-        <h1>De Neon-Express</h1>
-        <div class="subtitle">Interactieve Expo-Installatie voor het Spoorwegmuseum</div>
-        <div class="school-info">O&O Projectonderzoek • Klas 2HV2 • Gerrit Rietveld College</div>
-    </header>
+<header>
+    <h1>De Neon-Express</h1>
+    <div class="subtitle">Interactieve Expo-Installatie voor het Spoorwegmuseum</div>
+    <div class="school-info">O&O Projectonderzoek • Klas 2HV2 • Gerrit Rietveld College</div>
+</header>
 
-    <main>
-        <!-- SIMULATIE -->
-        <div class="simulation-container">
-            <h2 style="color: var(--neon-cyan); font-size: 1.2rem; text-transform: uppercase; margin-top: 0; margin-bottom: 15px;">Live Prototype Simulator</h2>
-            <canvas id="trainCanvas" width="700" height="300"></canvas>
-            
-            <div class="telemetry">
-                <div class="telemetry-item">Lego Motor Power: <span id="tel-speed" class="telemetry-value">0%</span></div>
-                <div class="telemetry-item">Neon EL-Wire: <span id="tel-lights" class="telemetry-value">UIT</span></div>
-                <div class="telemetry-item">LED Rails Kleur: <span id="tel-color" class="telemetry-value">Cyaan</span></div>
-                <div class="telemetry-item">Hardware Link: <span class="telemetry-value" style="color: var(--neon-green);">CONNECTED</span></div>
-            </div>
-        </div>
-
-        <!-- BEDIENING -->
-        <div class="control-panel">
-            <h2 class="panel-title">Bedieningspaneel</h2>
-            
-            <div class="control-group">
-                <label for="speedSlider">Lego Technic Vermogen (Snelheid):</label>
-                <input type="range" id="speedSlider" min="0" max="100" value="0">
-            </div>
-
-            <div class="control-group">
-                <label>Trein Verlichting (Neon Glow):</label>
-                <button id="btnLights" onclick="toggleLights()">Zet Neon Aan</button>
-            </div>
-
-            <div class="control-group">
-                <label>Kleur LED-Verlichting Rails:</label>
-                <div class="btn-grid">
-                    <button id="btnColorCyan" class="active-cyan" onclick="setRailsColor('cyan')">Cyaan</button>
-                    <button id="btnColorMagenta" onclick="setRailsColor('magenta')">Magenta</button>
-                </div>
-            </div>
-
-            <button style="background-color: #5c0623; border-color: var(--neon-magenta); color: white; margin-top: 15px; font-size: 1rem;" onclick="emergencyStop()">⚠️ NOODSTOP</button>
-        </div>
-    </main>
-
-    <!-- PROSPECT DATA & DOCUMENTATIE WALL -->
-    <div class="info-section">
+<main>
+    <!-- SIMULATIE -->
+    <div class="simulation-container" id="simContainer">
+        <h2 style="color: var(--active-glow); font-size: 1.2rem; text-transform: uppercase; margin-top: 0; margin-bottom: 15px; transition: color 0.3s ease;" id="simTitle">Live Bocht- & Snelheidssimulator</h2>
+        <canvas id="trainCanvas" width="700" height="350"></canvas>
         
-        <!-- SECTIE 1 -->
-        <div class="info-card">
-            <h2>1. Onderzoek op locatie: Spoorwegmuseum</h2>
-            <h3>A. Observaties op Locatie</h3>
-            <p>Tijdens ons veldonderzoek in het Spoorwegmuseum in Utrecht hebben we geanalyseerd hoe techniek en geschiedenis op dit moment worden overgedragen. Het museum is opgedeeld in vier hoofdwerelden: De Grote Ontdekking, Droomreizen, Stalen Monsters en de grote interactieve Werkplaats. De sfeer in de 'Stalen Monsters' attractie viel direct op: donkere ruimtes verlicht door spots trekken enorm de aandacht en creëren spanning.</p>
-            
-            <h3>B. Interview met Museummedewerker</h3>
-            <p>We hebben ter plekke gesproken met een technische gastheer van het museum. De belangrijkste inzichten uit dit gesprek:</p>
-            <ul>
-                <li><strong>Doelstelling:</strong> Het museum wil jong en oud op een interactieve manier laten ervaren hoe belangrijk spoortechniek en innovatie zijn voor Nederland.</li>
-                <li><strong>Uitdaging:</strong> Omdat onderdelen van 100 jaar oude stoomlocomotieven niet meer bestaan, moet de eigen werkplaats alles met de hand namaken. Techniek is dus echt vakmanschap.</li>
-                <li><strong>Vernieuwing:</strong> Het museum wil minder focussen op statische leesbordjes en juist meer inzetten op pure beleving en fysieke proefjes, zoals in het Techlab.</li>
-            </ul>
-            
-            <h3>C. Conclusie Veldonderzoek</h3>
-            <p>Hoewel het museum sterke historische verhalen vertelt, mist er een duidelijke, moderne visuele trigger die specifiek aansluit bij de hedendaagse leefwereld van middelbare scholieren.</p>
+        <div class="telemetry">
+            <div class="telemetry-item">Trein Snelheid: <span id="tel-speed" class="telemetry-value">0 km/u</span></div>
+            <div class="telemetry-item">Wagons gekoppeld: <span id="tel-wagons" class="telemetry-value">3</span></div>
+            <div class="telemetry-item">Gekozen Circuit: <span id="tel-circuit" class="telemetry-value">De Grote Bocht</span></div>
+            <div class="telemetry-item">Neon Kleurschema: <span id="tel-color" class="telemetry-value" style="color: var(--neon-cyan);">Cyaan</span></div>
         </div>
-
-        <!-- SECTIE 2 -->
-        <div class="info-card">
-            <h2>2. Onderzoek onder leeftijdsgenoten</h2>
-            <p>Om te begrijpen wat onze doelgroep (12 t/m 16 jaar) zoekt in een museumbezoek, hebben we een enquête afgenomen onder <strong>32 leerlingen van de HAVO/VWO onderbouw</strong>. Dit leverde cruciale data op:</p>
-            
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-num">68%</div>
-                    <div class="stat-lbl">Vindt musea snel saai als ze alleen mogen kijken/lezen</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-num">85%</div>
-                    <div class="stat-lbl">Onthoudt info beter via gamification of simulatoren</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-num">25%</div>
-                    <div class="stat-lbl">Bezocht het afgelopen jaar vrijwillig een techniekmuseum</div>
-                </div>
-            </div>
-
-            <h3>Hobby's en Vrijetijdsbesteding</h3>
-            <p>Uit het onderzoek blijkt dat de vrijetijd van onze leeftijdsgenoten gedomineerd wordt door <strong>gaming</strong> (competitie, VR, levels) en <strong>social media</strong> (TikTok en Instagram-waardige, visuele locaties). Statische objecten verliezen de concurrentie van schermen en dynamiek.</p>
-            
-            <h3>Conclusie Doelgroep</h3>
-            <p>Onze installatie moet gebruikmaken van felle, visuele elementen ("Instagrammable") en moet echt kunnen bewegen om de doelgroep te prikkelen.</p>
-        </div>
-
-        <!-- SECTIE 3 -->
-        <div class="info-card">
-            <h2>3. Gluren bij de buren (Museumvergelijking)</h2>
-            <p>We hebben gekeken naar twee uitersten in de museumwereld om inspiratie op te doen voor ons ontwerp:</p>
-            <ul>
-                <li><strong>NEMO Science Museum:</strong> Hét voorbeeld van een 'hands-on' mentaliteit. Jongeren voeren zelf proeven uit, wat zorgt voor een hoge actieve betrokkenheid. Dit principe van zelf de controle hebben nemen we mee.</li>
-                <li><strong>NXT Museum Amsterdam:</strong> Een museum gericht op grootschalige digitale kunst en lichtinstallaties in volledig verduisterde kamers. Dit is extreem populair op social media vanwege het futuristische design en de felle neon-contrasten.</li>
-            </ul>
-            <p><strong>Conclusie:</strong> Door het mechanische aspect van NEMO te combineren met het visuele spektakel (neon in het donker) van het NXT Museum, ontstaat de perfecte formule voor het Spoorwegmuseum.</p>
-        </div>
-
-        <!-- SECTIE 4 & 5 -->
-        <div class="info-card">
-            <h2>4 & 5. Brainstorm & Algehele Conclusie</h2>
-            <p>Tijdens onze brainstorm hebben we gekozen voor de focus: <strong>Licht en Beweging</strong>. We wilden absoluut geen papieren vragenlijst of app ontwerpen. Onze algehele conclusie luidt dat we een installatie moeten bouwen die de klassieke spoorwegtechniek eert, maar deze presenteert met de technologie en pop-cultuur van nu.</p>
-            <p>Hieruit is de <strong>Neon-Express</strong> ontstaan: een rijdende Lego Technic-trein, uitgerust met felle neon-wires, die rijdt over een interactieve rails van programmeerbare LED-strips in een volledig verduisterde expositieruimte.</p>
-        </div>
-
-        <!-- SECTIE 6 & 7 -->
-        <div class="info-card">
-            <h2>6 & 7. Het Ontwerp & De Maquette</h2>
-            <h3>Belevingsroute (Infographic)</h3>
-            <div class="flow-step"><strong>Stap 1: De Entree</strong> ➔ De bezoeker stapt een compleet donkere ruimte binnen. Enkel de felle LED-rails lichten op op de vloer.</div>
-            <div class="flow-step"><strong>Stap 2: De Actie</strong> ➔ De Neon-Express (Lego Technic) start zijn motor en trekt op hoge snelheid een spoor van neonlicht door de ruimte. De draaiende tandwielen lichten op.</div>
-            <div class="flow-step"><strong>Stap 3: De Interactie</strong> ➔ Bezoekers gebruiken dit digitale dashboard om zelf de treinsnelheid en de kleuren van de kamer aan te passen en content te delen op social media.</div>
-
-            <h3>Specificaties van de Maquette</h3>
-            <ul>
-                <li><strong>De Trein:</strong> Gebouwd op schaal 1:15 met Lego Technic (balken, geperforeerde tandwielen en een krachtige 9V Lego Power Functions motor). De buitenzijde is gewrapt met flexibele, oplichtende EL-wire (neon-draad).</li>
-                <li><strong>De Rails:</strong> Gemonteerd op een donkere houten ondergrond (100 cm x 40 cm), voorzien van flexibele, adresseerbare LED-strips die meekleuren op basis van de invoer op het bedieningspaneel.</li>
-                <li><strong>Presentatiestrategie:</strong> Om dit concept krachtig over te brengen op de opdrachtgever, zullen we tijdens de live-demonstratie de verlichting in het klaslokaal volledig doven.</li>
-            </ul>
-        </div>
-
     </div>
 
-    <footer>
-        &copy; 2026 O&O Ontwerpteam 2HV2 - Gerrit Rietveld College. Gemaakt voor het Spoorwegmuseum Utrecht.
-    </footer>
-
-    <script>
-        // Canvas en Context Setup
-        const canvas = document.getElementById('trainCanvas');
-        const ctx = canvas.getContext('2d');
+    <!-- BEDIENING -->
+    <div class="control-panel">
+        <h2 class="panel-title">Machinist Bedieningspaneel</h2>
         
-        // Applicatie Status
-        let speed = 0;
-        let lightsOn = false;
-        let railsColor = 'cyan';
-        let trainX = 50;
+        <!-- Gashendel -->
+        <div class="control-group">
+            <label for="throttleSlider">Gashendel (Stroomtoevoer Lego Motor):</label>
+            <input type="range" id="throttleSlider" min="0" max="100" value="0">
+        </div>
 
-        // HTML Elementen koppelen
-        const speedSlider = document.getElementById('speedSlider');
-        const telSpeed = document.getElementById('tel-speed');
-        const telLights = document.getElementById('tel-lights');
-        const telColor = document.getElementById('tel-color');
-        const btnLights = document.getElementById('btnLights');
-        const btnColorCyan = document.getElementById('btnColorCyan');
-        const btnColorMagenta = document.getElementById('btnColorMagenta');
+        <!-- Rem -->
+        <div class="control-group">
+            <label for="brakeSlider">Handrem (Mechanische wrijving):</label>
+            <input type="range" id="brakeSlider" min="0" max="100" value="0">
+        </div>
 
-        // Slider input verwerken
-        speedSlider.addEventListener('input', (e) => {
-            speed = parseInt(e.target.value);
-            telSpeed.innerText = speed + '%';
+        <!-- Wagons -->
+        <div class="control-group">
+            <label for="wagonSlider">Aantal Lego-Wagons gekoppeld: <span id="wagonCountDisplay">3</span></label>
+            <input type="range" id="wagonSlider" min="1" max="5" value="3">
+        </div>
+
+        <!-- Circuit Selector -->
+        <div class="control-group">
+            <label>Kies Spoor / Circuit:</label>
+            <div class="btn-grid-3">
+                <button id="btnCircuit1" class="active" onclick="setCircuit(1)">De Grote Bocht</button>
+                <button id="btnCircuit2" onclick="setCircuit(2)">Infinity Loop</button>
+                <button id="btnCircuit3" onclick="setCircuit(3)">Techlab S-Bocht</button>
+            </div>
+        </div>
+
+        <!-- Neon Kleurschema -->
+        <div class="control-group">
+            <label>Neon Kleur veranderen:</label>
+            <div class="btn-grid-4">
+                <button id="colorBtn-cyan" class="active" onclick="changeColor('cyan')">Cyaan</button>
+                <button id="colorBtn-magenta" onclick="changeColor('magenta')">Magenta</button>
+                <button id="colorBtn-green" onclick="changeColor('green')">Groen</button>
+                <button id="colorBtn-orange" onclick="changeColor('orange')">Oranje</button>
+            </div>
+        </div>
+
+        <button style="background-color: #5c0623; border-color: var(--neon-magenta); color: white; margin-top: 10px; font-size: 1rem;" onclick="emergencyStop()">⚠️ NOODSTOP (Brake Lock)</button>
+    </div>
+</main>
+
+<!-- PROSPECT DATA & DOCUMENTATIE WALL -->
+<div class="info-section">
+    
+    <!-- SECTIE 1 -->
+    <div class="info-card">
+        <h2>1. Onderzoek op locatie: Spoorwegmuseum</h2>
+        <h3>A. Observaties op Locatie</h3>
+        <p>Tijdens ons veldonderzoek in het Spoorwegmuseum in Utrecht hebben we geanalyseerd hoe techniek en geschiedenis op dit moment worden overgedragen. Het museum is opgedeeld in vier hoofdwerelden: De Grote Ontdekking, Droomreizen, Stalen Monsters en de grote interactieve Werkplaats. De sfeer in de 'Stalen Monsters' attractie viel direct op: donkere ruimtes verlicht door spots trekken enorm de aandacht en creëren spanning.</p>
+        
+        <h3>B. Interview met Museummedewerker</h3>
+        <p>We hebben ter plekke gesproken met een technische gastheer van het museum. De belangrijkste inzichten uit dit gesprek:</p>
+        <ul>
+            <li><strong>Doelstelling:</strong> Het museum wil jong en oud op een interactieve manier laten ervaren hoe belangrijk spoortechniek en innovatie zijn voor Nederland.</li>
+            <li><strong>Uitdaging:</strong> Omdat onderdelen van 100 jaar oude stoomlocomotieven niet meer bestaan, moet de eigen werkplaats alles met de hand namaken. Techniek is dus echt vakmanschap.</li>
+            <li><strong>Vernieuwing:</strong> Het museum wil minder focussen op statische leesbordjes en juist meer inzetten op pure beleving en fysieke proefjes, zoals in het Techlab.</li>
+        </ul>
+        
+        <h3>C. Conclusie Veldonderzoek</h3>
+        <p>Hoewel het museum sterke historische verhalen vertelt, mist er een duidelijke, moderne visuele trigger die specifiek aansluit bij de hedendaagse leefwereld van middelbare scholieren.</p>
+    </div>
+
+    <!-- SECTIE 2 -->
+    <div class="info-card">
+        <h2>2. Onderzoek onder leeftijdsgenoten</h2>
+        <p>Om te begrijpen wat onze doelgroep (12 t/m 16 jaar) zoekt in een museumbezoek, hebben we een enquête afgenomen onder <strong>32 leerlingen van de HAVO/VWO onderbouw</strong>. Dit leverde cruciale data op:</p>
+        
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-num">68%</div>
+                <div class="stat-lbl">Vindt musea snel saai als ze alleen mogen kijken/lezen</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">85%</div>
+                <div class="stat-lbl">Onthoudt info beter via gamification of simulatoren</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">25%</div>
+                <div class="stat-lbl">Bezocht het afgelopen jaar vrijwillig een techniekmuseum</div>
+            </div>
+        </div>
+
+        <h3>Hobby's en Vrijetijdsbesteding</h3>
+        <p>Uit het onderzoek blijkt dat de vrijetijd van onze leeftijdsgenoten gedomineerd wordt door <strong>gaming</strong> (competitie, VR, levels) en <strong>social media</strong> (TikTok en Instagram-waardige, visuele locaties). Statische objecten verliezen de concurrentie van schermen en dynamiek.</p>
+        
+        <h3>Conclusie Doelgroep</h3>
+        <p>Onze installatie moet gebruikmaken van felle, visuele elementen ("Instagrammable") en moet echt kunnen bewegen om de doelgroep te prikkelen.</p>
+    </div>
+
+    <!-- SECTIE 3 -->
+    <div class="info-card">
+        <h2>3. Gluren bij de buren (Museumvergelijking)</h2>
+        <p>We hebben gekeken naar twee uitersten in de museumwereld om inspiratie op te doen voor ons ontwerp:</p>
+        <ul>
+            <li><strong>NEMO Science Museum:</strong> Hét voorbeeld van een 'hands-on' mentaliteit. Jongeren voeren zelf proeven uit, wat zorgt voor een hoge actieve betrokkenheid. Dit principe van zelf de controle hebben nemen we mee.</li>
+            <li><strong>NXT Museum Amsterdam:</strong> Een museum gericht op grootschalige digitale kunst en lichtinstallaties in volledig verduisterde kamers. Dit is extreem populair op social media vanwege het futuristische design en de felle neon-contrasten.</li>
+        </ul>
+        <p><strong>Conclusie:</strong> Door het mechanische aspect van NEMO te combineren met het visuele spektakel (neon in het donker) van het NXT Museum, ontstaat de perfecte formule voor het Spoorwegmuseum.</p>
+    </div>
+
+    <!-- SECTIE 4 & 5 -->
+    <div class="info-card">
+        <h2>4 & 5. Brainstorm & Algehele Conclusie</h2>
+        <p>Tijdens onze brainstorm hebben we gekozen voor de focus: <strong>Licht en Beweging</strong>. We wilden absoluut geen papieren vragenlijst of app ontwerpen. Onze algehele conclusie luidt dat we een installatie moeten bouwen die de klassieke spoorwegtechniek eert, maar deze presenteert met de technologie en pop-cultuur van nu.</p>
+        <p>Hieruit is de <strong>Neon-Express</strong> ontstaan: een rijdende Lego Technic-trein, uitgerust met felle neon-wires, die rijdt over een interactieve rails van programmeerbare LED-strips in een volledig verduisterde expositieruimte.</p>
+    </div>
+
+    <!-- SECTIE 6 & 7 -->
+    <div class="info-card">
+        <h2>6 & 7. Het Ontwerp & De Maquette</h2>
+        <h3>Belevingsroute (Infographic)</h3>
+        <div class="flow-step"><strong>Stap 1: De Entree</strong> ➔ De bezoeker stapt een compleet donkere ruimte binnen. Enkel de felle LED-rails lichten op op de vloer.</div>
+        <div class="flow-step"><strong>Stap 2: De Actie</strong> ➔ De Neon-Express (Lego Technic) start zijn motor en trekt op hoge snelheid een spoor van neonlicht door de ruimte. De draaiende tandwielen lichten op.</div>
+        <div class="flow-step"><strong>Stap 3: De Interactie</strong> ➔ Bezoekers gebruiken dit digitale dashboard om zelf de treinsnelheid en de kleuren van de kamer aan te passen en content te delen op social media.</div>
+
+        <h3>Specificaties van de Maquette</h3>
+        <ul>
+            <li><strong>De Trein:</strong> Gebouwd op schaal 1:15 met Lego Technic (balken, geperforeerde tandwielen en een krachtige 9V Lego Power Functions motor). De buitenzijde is gewrapt met flexibele, oplichtende EL-wire (neon-draad).</li>
+            <li><strong>De Rails:</strong> Gemonteerd op een donkere houten ondergrond (100 cm x 40 cm), voorzien van flexibele, adresseerbare LED-strips die meekleuren op basis van de invoer op het bedieningspaneel.</li>
+            <li><strong>Presentatiestrategie:</strong> Om dit concept krachtig over te brengen op de opdrachtgever, zullen we tijdens de live-demonstratie de verlichting in het klaslokaal volledig doven.</li>
+        </ul>
+    </div>
+
+</div>
+
+<footer>
+    &copy; 2026 O&O Ontwerpteam 2HV2 - Gerrit Rietveld College. Gemaakt voor het Spoorwegmuseum Utrecht.
+</footer>
+
+<script>
+    // Canvas Setup
+    const canvas = document.getElementById('trainCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Snelheid & Fysica State
+    let currentSpeed = 0; // Huidige snelheid
+    let throttle = 0;     // Gashendel percentage
+    let brakes = 0;       // Rem percentage
+    let numWagons = 3;    // Aantal gekoppelde wagons
+    let activeCircuit = 1; // Huidige circuit ID
+    let trackPoints = []; // Lijst met gegenereerde baankoördinaten
+    
+    let trainProgress = 0; // Huidige index op het spoor (0 t/m 999)
+
+    // Kleuren
+    let neonHex = '#00f3ff'; // Standaard cyaan
+    const colors = {
+        cyan: { hex: '#00f3ff', label: 'Cyaan' },
+        magenta: { hex: '#ff0077', label: 'Magenta' },
+        green: { hex: '#39ff14', label: 'Lime Groen' },
+        orange: { hex: '#ff5e00', label: 'Electric Oranje' }
+    };
+
+    // DOM Elementen
+    const throttleSlider = document.getElementById('throttleSlider');
+    const brakeSlider = document.getElementById('brakeSlider');
+    const wagonSlider = document.getElementById('wagonSlider');
+    const wagonCountDisplay = document.getElementById('wagonCountDisplay');
+    const telSpeed = document.getElementById('tel-speed');
+    const telWagons = document.getElementById('tel-wagons');
+    const telCircuit = document.getElementById('tel-circuit');
+    const telColor = document.getElementById('tel-color');
+    const simContainer = document.getElementById('simContainer');
+    const simTitle = document.getElementById('simTitle');
+
+    // Event Listeners voor Sliders
+    throttleSlider.addEventListener('input', (e) => {
+        throttle = parseInt(e.target.value);
+    });
+
+    brakeSlider.addEventListener('input', (e) => {
+        brakes = parseInt(e.target.value);
+    });
+
+    wagonSlider.addEventListener('input', (e) => {
+        numWagons = parseInt(e.target.value);
+        wagonCountDisplay.innerText = numWagons;
+        telWagons.innerText = numWagons;
+    });
+
+    // 1. Spoor Circuits Genereren
+    function generateTrack() {
+        trackPoints = [];
+        const numPoints = 1000;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        for (let i = 0; i < numPoints; i++) {
+            let angle = (i / numPoints) * Math.PI * 2;
+            let x, y;
+
+            if (activeCircuit === 1) {
+                // Circuit 1: De Grote Kidney Bocht (Vloeiend ovaal met lichte knik)
+                x = centerX + 280 * Math.cos(angle);
+                y = centerY + 100 * Math.sin(angle) + 40 * Math.sin(2 * angle);
+            } else if (activeCircuit === 2) {
+                // Circuit 2: Infinity Loop (Crossover-stijl achtvorm)
+                x = centerX + 270 * Math.sin(angle);
+                y = centerY + 110 * Math.sin(angle) * Math.cos(angle);
+            } else {
+                // Circuit 3: Techlab S-Bocht (Wervelende slinger)
+                x = centerX + 260 * Math.cos(angle) + 30 * Math.sin(3 * angle);
+                y = centerY + 100 * Math.sin(angle) + 20 * Math.cos(2 * angle);
+            }
+
+            trackPoints.push({ x, y });
+        }
+    }
+
+    // 2. Circuit veranderen
+    function setCircuit(circuitId) {
+        activeCircuit = circuitId;
+        generateTrack();
+        
+        // UI updaten
+        document.getElementById('btnCircuit1').classList.remove('active');
+        document.getElementById('btnCircuit2').classList.remove('active');
+        document.getElementById('btnCircuit3').classList.remove('active');
+        document.getElementById('btnCircuit' + circuitId).classList.add('active');
+
+        const names = ["De Grote Bocht", "Infinity Loop", "Techlab S-Bocht"];
+        telCircuit.innerText = names[circuitId - 1];
+    }
+
+    // 3. Neon kleur veranderen
+    function changeColor(colorName) {
+        const color = colors[colorName];
+        neonHex = color.hex;
+        
+        // Pas CSS variabelen en dashboard kleur gloed direct aan
+        document.documentElement.style.setProperty('--active-glow', color.hex);
+        simContainer.style.borderColor = color.hex;
+        simContainer.style.boxShadow = `0 0 20px ${color.hex}40`;
+        simTitle.style.color = color.hex;
+
+        // Knoppen updaten
+        ['cyan', 'magenta', 'green', 'orange'].forEach(c => {
+            document.getElementById('colorBtn-' + c).classList.remove('active');
         });
+        document.getElementById('colorBtn-' + colorName).classList.add('active');
 
-        // Knop Neon Verlichting aan/uit
-        function toggleLights() {
-            lightsOn = !lightsOn;
-            if(lightsOn) {
-                telLights.innerText = "AAN (NEON)";
-                telLights.style.color = "var(--neon-cyan)";
-                btnLights.classList.add('active-cyan');
-                btnLights.innerText = "Zet Neon Uit";
-            } else {
-                telLights.innerText = "UIT";
-                telLights.style.color = "var(--neon-green)";
-                btnLights.classList.remove('active-cyan');
-                btnLights.innerText = "Zet Neon Aan";
-            }
+        // Telemetrie
+        telColor.innerText = color.label;
+        telColor.style.color = color.hex;
+    }
+
+    // 4. Noodstop
+    function emergencyStop() {
+        throttle = 0;
+        brakes = 100;
+        throttleSlider.value = 0;
+        brakeSlider.value = 100;
+    }
+
+    // Start initieel spoor
+    generateTrack();
+
+    // 5. Animatie en Physics Loop
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // --- RELEVANTE TREIN PHYSICS ---
+        // Gashendel verhoogt de snelheid, de remmen en de weerstand vertragen het
+        let targetAcceleration = (throttle / 100) * 8; 
+        let brakingDeceleration = (brakes / 100) * 12;
+        let normalFriction = 0.1;
+
+        // Update de snelheid
+        currentSpeed += targetAcceleration - brakingDeceleration - normalFriction;
+        if (currentSpeed < 0) currentSpeed = 0;
+        if (currentSpeed > 150) currentSpeed = 150; // Max snelheid begrenzen
+
+        // Bereken de live telemetrie
+        telSpeed.innerText = Math.round(currentSpeed) + " km/u";
+
+        // Update positie van de locomotief over het spoor
+        if (currentSpeed > 0) {
+            // Snelheidsfactor omzetten naar stapgrootte op de 1000 indexpunten
+            trainProgress += (currentSpeed / 12);
+            if (trainProgress >= 1000) trainProgress -= 1000;
         }
 
-        // Knop Rails Kleur aanpassen
-        function setRailsColor(color) {
-            railsColor = color;
-            if(color === 'cyan') {
-                telColor.innerText = "Cyaan";
-                telColor.style.color = "var(--neon-cyan)";
-                btnColorCyan.classList.add('active-cyan');
-                btnColorMagenta.classList.remove('active-magenta');
-            } else {
-                telColor.innerText = "Magenta";
-                telColor.style.color = "var(--neon-magenta)";
-                btnColorCyan.classList.remove('active-cyan');
-                btnColorMagenta.classList.add('active-magenta');
-            }
+        // --- 1. SPELENDE NEON RAILS TEKENEN ---
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = neonHex;
+        ctx.strokeStyle = neonHex;
+        ctx.lineWidth = 3;
+
+        // Teken de spoorstaaf (als één gesloten, gloeiend circuit)
+        ctx.beginPath();
+        ctx.moveTo(trackPoints[0].x, trackPoints[0].y);
+        for (let i = 1; i < trackPoints.length; i++) {
+            ctx.lineTo(trackPoints[i].x, trackPoints[i].y);
         }
+        ctx.closePath();
+        ctx.stroke();
 
-        // Noodstop functie
-        function emergencyStop() {
-            speed = 0;
-            speedSlider.value = 0;
-            telSpeed.innerText = '0%';
-            if(lightsOn) toggleLights();
-        }
-
-        // Real-time Animatie Lus (Engine)
-        function draw() {
-            // Maak het scherm elke frame schoon
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Update positie van de trein op basis van de gekozen snelheid
-            if (speed > 0) {
-                trainX += (speed / 15);
-                if (trainX > canvas.width + 160) {
-                    trainX = -160; // Kom weer terug aan de linkerkant
-                }
-            }
-
-            // --- 1. RAILS TEKENEN ---
-            ctx.shadowBlur = 18;
-            ctx.shadowColor = railsColor === 'cyan' ? '#00f3ff' : '#ff0077';
-            ctx.strokeStyle = railsColor === 'cyan' ? '#00f3ff' : '#ff0077';
-            ctx.lineWidth = 4;
+        // Teken de bielzen (dwarsliggers) langs het bochtige spoor
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = '#1e233d';
+        ctx.lineWidth = 2;
+        for (let i = 0; i < trackPoints.length; i += 20) {
+            let p = trackPoints[i];
+            let pAhead = trackPoints[(i + 5) % 1000];
             
-            // Bovenste railstaaf
+            // Bereken hoek loodrecht op het spoor voor de bielsen
+            let angle = Math.atan2(pAhead.y - p.y, pAhead.x - p.x);
+            let perpX = Math.sin(angle) * 8;
+            let perpY = -Math.cos(angle) * 8;
+
             ctx.beginPath();
-            ctx.moveTo(0, 200);
-            ctx.lineTo(canvas.width, 200);
-            // Onderste railstaaf
-            ctx.moveTo(0, 222);
-            ctx.lineTo(canvas.width, 222);
+            ctx.moveTo(p.x - perpX, p.y - perpY);
+            ctx.lineTo(p.x + perpX, p.y + perpY);
             ctx.stroke();
+        }
 
-            // Lego Bielzen (Dwarsliggers)
-            ctx.shadowBlur = 0;
-            ctx.strokeStyle = '#1e233d';
-            ctx.lineWidth = 4;
-            for(let i = 0; i < canvas.width; i += 35) {
-                ctx.beginPath();
-                ctx.moveTo(i, 194);
-                ctx.lineTo(i, 228);
-                ctx.stroke();
-            }
+        // --- 2. MULTIPLE WAGONS & LOCOMOTIEF TEKENEN ---
+        // We tekenen de locomotief voorop, en de gekozen wagons erachter
+        // Elke wagon ligt telkens een vast aantal stappen achter de vorige wagon op de rails
+        const wagonGap = 35; // Afstand in indexen op het spoor
 
-            // --- 2. LEGO TECHNIC TREIN TEKENEN ---
-            ctx.fillStyle = '#15192e';
-            ctx.shadowBlur = lightsOn ? 25 : 0;
-            ctx.shadowColor = '#00f3ff';
+        for (let w = 0; w <= numWagons; w++) {
+            // Bereken de index van dit treindeel (locomotief is w = 0)
+            let wIdx = Math.floor(trainProgress - (w * wagonGap));
+            while (wIdx < 0) wIdx += 1000; // Correctie voor negatieve getallen
+            wIdx = wIdx % 1000;
+
+            let p = trackPoints[wIdx];
+            let pAhead = trackPoints[(wIdx + 4) % 1000]; // Richtingbepaler
             
-            // Hoofdchassis
-            ctx.fillRect(trainX, 135, 150, 50); 
-            
-            // Lego Noppen op het dak (Technic look)
-            ctx.fillStyle = '#2d355e';
-            for(let i = 8; i < 150; i += 16) {
-                ctx.fillRect(trainX + i, 129, 8, 6);
-            }
+            // Bereken rotatiehoek langs de bocht van de rails
+            let angle = Math.atan2(pAhead.y - p.y, pAhead.x - p.x);
 
-            // Cockpit (Licht op als neon aan staat)
-            ctx.fillStyle = lightsOn ? 'rgba(0, 243, 255, 0.8)' : '#252b47';
-            ctx.beginPath();
-            ctx.moveTo(trainX + 105, 142);
-            ctx.lineTo(trainX + 135, 142);
-            ctx.lineTo(trainX + 142, 160);
-            ctx.lineTo(trainX + 105, 160);
-            ctx.closePath();
-            ctx.fill();
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(angle);
 
-            // Neon details op de zijkant van de trein
-            ctx.strokeStyle = lightsOn ? 'var(--neon-magenta)' : '#2d355e';
-            ctx.lineWidth = 3;
-            ctx.shadowColor = 'var(--neon-magenta)';
-            ctx.beginPath();
-            ctx.moveTo(trainX + 15, 165);
-            ctx.lineTo(trainX + 90, 165);
-            ctx.stroke();
-
-            // Tandwielen / Wielen (Lego Technic stijl)
-            ctx.fillStyle = '#0d0f1d';
-            ctx.strokeStyle = lightsOn ? '#ff0077' : '#3b457a';
-            ctx.lineWidth = 3;
-            ctx.shadowBlur = 0; // Geen zware gloed op wielen zelf
-            
-            let wheels = [trainX + 30, trainX + 75, trainX + 120];
-            wheels.forEach(pos => {
-                ctx.beginPath();
-                ctx.arc(pos, 195, 16, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.stroke();
+            // Kleur bepalen: Locomotief is donkergrijs/zwart, wagons zijn super kleurrijk!
+            if (w === 0) {
+                // Locomotief
+                ctx.fillStyle = '#17192b';
+                ctx.strokeStyle = neonHex;
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = neonHex;
                 
-                // Technic gaten in tandwiel tekenen
-                ctx.fillStyle = '#222947';
-                for(let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
-                    let hX = pos + Math.cos(angle) * 8;
-                    let hY = 195 + Math.sin(angle) * 8;
-                    ctx.beginPath();
-                    ctx.arc(hX, hY, 3, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.fillStyle = '#0d0f1d'; // Reset voor volgende wiel
-            });
+                // Chassis
+                ctx.fillRect(-16, -7, 32, 14);
+                ctx.strokeRect(-16, -7, 32, 14);
 
-            // Lichtbundel uit de koplamp
-            if(lightsOn) {
-                ctx.shadowBlur = 40;
-                ctx.shadowColor = '#00f3ff';
-                ctx.fillStyle = 'rgba(0, 243, 255, 0.12)';
+                // Cockpit dak
+                ctx.fillStyle = '#2c3258';
+                ctx.fillRect(-12, -6, 12, 12);
+
+                // Koplamp neon-straal
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.fillRect(16, -2, 5, 4);
+
+                // Gloeiend raampje
+                ctx.fillStyle = neonHex;
+                ctx.fillRect(-6, -4, 4, 8);
+            } else {
+                // Wagon (Kleurrijk neon-frame passend bij het thema)
+                ctx.fillStyle = '#0f111f';
+                ctx.strokeStyle = w % 2 === 0 ? 'var(--neon-magenta)' : neonHex;
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = ctx.strokeStyle;
+
+                // Wagon chassis
+                ctx.fillRect(-14, -6, 28, 12);
+                ctx.strokeRect(-14, -6, 28, 12);
+
+                // Lego Technic Noppen/Lading
+                ctx.fillStyle = w % 2 === 0 ? 'var(--neon-magenta)' : neonHex;
                 ctx.beginPath();
-                ctx.moveTo(trainX + 150, 150);
-                ctx.lineTo(canvas.width, 80);
-                ctx.lineTo(canvas.width, 260);
-                ctx.closePath();
+                ctx.arc(-6, 0, 3, 0, Math.PI * 2);
+                ctx.arc(6, 0, 3, 0, Math.PI * 2);
                 ctx.fill();
             }
 
-            // Roep de volgende frame aan
-            requestAnimationFrame(draw);
+            // Kleine Lego Technic wielen tekenen onder de wagons
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#000';
+            ctx.fillRect(-11, -9, 5, 2);
+            ctx.fillRect(-11, 7, 5, 2);
+            ctx.fillRect(6, -9, 5, 2);
+            ctx.fillRect(6, 7, 5, 2);
+
+            ctx.restore();
         }
 
-        // Start direct met animeren van de canvas
-        draw();
-    </script>
-</body>
-</html>
+        requestAnimationFrame(draw);
+    }
+
+    // Start direct de animatie van de simulator
+    draw();
+</script>
