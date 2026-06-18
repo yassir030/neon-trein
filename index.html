@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spoorwegmuseum - Bestuur de Neon-Express</title>
+    <style>
+        :root {
+            --bg-color: #0d0e15;
+            --panel-bg: #161925;
+            --neon-cyan: #00f3ff;
+            --neon-magenta: #ff0077;
+            --neon-green: #39ff14;
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            background: linear-gradient(180deg, rgba(0,243,255,0.1) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+        }
+
+        .subtitle {
+            color: #aaa;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        main {
+            max-width: 1200px;
+            width: 95%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        @media (min-width: 900px) {
+            main {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        /* Simulatie Scherm */
+        .simulation-container {
+            background-color: var(--panel-bg);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            background-color: #050508;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 700px;
+            height: 300px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* Bedieningspaneel */
+        .control-panel {
+            background-color: var(--panel-bg);
+            border: 2px solid var(--neon-magenta);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(255, 0, 119, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            color: var(--neon-magenta);
+            text-shadow: 0 0 5px var(--neon-magenta);
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Sliders & Knoppen */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: #252a40;
+            height: 8px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--neon-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #1f2336;
+            color: white;
+            border: 1px solid #444;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #2b314d;
+        }
+
+        button.active-cyan {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        button.active-magenta {
+            border-color: var(--neon-magenta);
+            box-shadow: 0 0 10px var(--neon-magenta);
+            color: var(--neon-magenta);
+        }
+
+        /* Status Telemetrie */
+        .telemetry {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            background: #090a0f;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        .telemetry-item {
+            font-size: 0.85rem;
+        }
+
+        .telemetry-value {
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+
+        /* Info Sectie onderaan */
+        .project-info {
+            background-color: var(--panel-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 10px;
+            border: 1px solid #252a40;
+        }
+
+        .project-info h2 {
+            color: var(--neon-cyan);
+            margin-top: 0;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            color: #555;
+            font-size: 0.8rem;
+            text-align: center;
+            width: 100%;
+            border-top: 1px solid #161925;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Neon-Express Dashboard</h1>
+        <div class="subtitle">O&O Project - Klas 2HV2 - Gerrit Rietveld College</div>
+    </header>
+
+    <main>
+        <div class="simulation-container">
+            <h2 style="color: var(--neon-cyan); font-size: 1.1rem; text-transform: uppercase; margin-top: 0; width: 100%;">Live Simulatie (Lego Technic Prototype)</h2>
+            <canvas id="trainCanvas" width="700" height="300"></canvas>
+            
+            <div class="telemetry" style="width: 100%; max-width: 680px; margin-top: 15px; box-sizing: border-box;">
+                <div class="telemetry-item">Lego Motor Power: <span id="tel-speed" class="telemetry-value">0%</span></div>
+                <div class="telemetry-item">Trein Verlichting: <span id="tel-lights" class="telemetry-value">UIT</span></div>
+                <div class="telemetry-item">Rails Neon Kleur: <span id="tel-color" class="telemetry-value">Cyaan</span></div>
+                <div class="telemetry-item">Systeem Status: <span class="telemetry-value" style="color: var(--neon-green);">ONLINE</span></div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h2 class="panel-title">Mechanisch Bedieningspaneel</h2>
+            
+            <div class="control-group">
+                <label for="speedSlider">Lego Technic Motor Snelheid (Stroomtoevoer):</label>
+                <input type="range" id="speedSlider" min="0" max="100" value="0">
+            </div>
+
+            <div class="control-group">
+                <label>Trein Koplampen (Neon EL-Wire):</label>
+                <button id="btnLights" onclick="toggleLights()">Zet Neon Aan</button>
+            </div>
+
+            <div class="control-group">
+                <label>Verander LED-Kleur van de Rails:</label>
+                <div class="btn-grid">
+                    <button id="btnColorCyan" class="active-cyan" onclick="setRailsColor('cyan')">Cyaan Blue</button>
+                    <button id="btnColorMagenta" onclick="setRailsColor('magenta')">Hot Magenta</button>
+                </div>
+            </div>
+
+            <button style="background-color: #770000; border-color: var(--neon-magenta); color: white; margin-top: 10px;" onclick="emergencyStop()">⚠️ NOODSTOP</button>
+        </div>
+    </main>
+
+    <div style="max-width: 1200px; width: 95%; padding: 0 20px; box-sizing: border-box;">
+        <div class="project-info">
+            <h2>Over dit Interactieve Concept</h2>
+            <p>Dit dashboard is ontworpen als onderdeel van de O&O-opdracht voor het <strong>Spoorwegmuseum</strong>. Uit ons doelgroeponderzoek bleek dat 85% van de jongeren houdt van gamification en interactie. Met deze web-app kunnen museumbezoekers zelf de Lego Technic-motoren aansturen en de lichtshows in de donkere expositieruimte bepalen.</p>
+            <p><strong>Presentatietip voor morgen:</strong> Open deze website op een laptop naast jullie echte Lego-maquette om te laten zien hoe de uiteindelijke app in het museum eruit zou kunnen zien!</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 O&O Ontwerpteam 2HV2 - Gerrit Rietveld College. Gemaakt voor het Spoorweg
